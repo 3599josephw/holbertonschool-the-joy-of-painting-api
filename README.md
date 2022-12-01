@@ -18,10 +18,10 @@ Once the repo is cloned:
 In the browser, go to 0.0.0.0/3000/filters
 
 Filter options:
-	- match (can be 1 or 0)
-	- subject
-	- months
-	- colors
+   * match (can be 1 or 0)
+   * subject
+   * months
+   * colors
 
 If match is 1, the query will return only episodes that match all of the filters
 If match is 0, the query will return any episodes that match any of the filters
