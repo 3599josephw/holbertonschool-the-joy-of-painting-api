@@ -12,7 +12,7 @@ const con = mysql.createConnection({
 });
 con.connect(async function(err) {
   if (err) throw err;
-  console.log("Connected!");
+  console.log("Connected to MySQL!");
 });
 
 app.get('/', (req, res) => {
@@ -24,31 +24,35 @@ app.get('/filter', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Server listening on port ${port}!`)
 });
 
 function filter(req, res) {
-  const { months } = req.query;
-  const { colors } = req.query;
-  const { subject } = req.query;
-  console.log(req.query);
-  let tmp = "SELECT e.title, e.month, c.Bright_Red, p.cabin \
+  const { months , colors, subject, match } = req.query;
+
+  // Example query
+
+  /*let tmp = "SELECT e.title, e.month, c.Bright_Red, p.cabin \
   FROM episode_dates AS e  JOIN colors_used AS c ON e.title=c.painting_title\
   JOIN subject_matter AS s ON s.title=e.title \
-  WHERE e.month IN ('January') AND c.Bright_Red = 1 AND c.Cadmium_Yellow=1  AND s.cabin = 1 AND s.diane_andre=1;"
+  WHERE e.month IN ('January') AND c.Bright_Red = 1 AND c.Cadmium_Yellow=1  AND s.cabin = 1 AND s.diane_andre=1;"*/
 
+  let andOr = "AND";
+  if (match == 0) {
+    andOr = "OR";
+  }
 
-  let sql = "SELECT e.title, e.month, c.colors";
+  let sql = "SELECT e.title, e.date, c.img_src, c.youtube_src, c.colors, c.color_hex";
   let subjectQuery = ""
   if (subject) {
     if (Array.isArray(subject)) {
       for (let i = 0; i < subject.length; i++) {
         sql += `, s.${subject[i]}`;
-        subjectQuery += `AND s.${subject[i]}=1`
+        subjectQuery += ` ${andOr} s.${subject[i]}=1`
       }
     } else {
       sql += `, s.${subject}`;
-      subjectQuery += `AND s.${subject}=1`
+      subjectQuery += ` ${andOr} s.${subject}=1`
     }
   }
 
@@ -58,7 +62,7 @@ function filter(req, res) {
 
   let monthQuery = ""
   if (months) {
-    monthQuery = "AND e.month IN (";
+    monthQuery = " AND e.month IN (";
     if (Array.isArray(months)) {
       for (let i = 0; i < months.length; i++) {
         monthQuery += "'" + months[i] + "'";
@@ -76,20 +80,20 @@ function filter(req, res) {
   if (colors) {
     if (Array.isArray(colors)) {
       for (let i = 0; i < colors.length; i++) {
-        colorQuery += `AND c.${colors[i]}=1`;
+        colorQuery += ` ${andOr} c.${colors[i]}=1`;
       }
     } else {
-      colorQuery += `AND c.${colors}=1`;
+      colorQuery += ` ${andOr} c.${colors}=1`;
     }
   }
   if (subject || months || colors) {
-    sql += " WHERE e.title=s.title ";
+    sql += " WHERE e.title=s.title";
   }
-  sql += `${monthQuery} ${colorQuery} ${subjectQuery}`;
+  sql += `${monthQuery} ${colorQuery} ${subjectQuery};`;
 
   con.query(sql, function (err, result, fields) {
-    if (err) throw err;
+    if (err) console.log(err), res.send('Query failed, woops!');
+    console.log(result);
     res.send(result);
   });
-  console.log(sql);
 }

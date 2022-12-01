@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS subject_matter (
 	aurora_borealis INT NOT NULL DEFAULT 0,
 	barn INT NOT NULL DEFAULT 0,
 	beach INT NOT NULL DEFAULT 0,
+	boat INT NOT NULL DEFAULT 0,
 	bridge INT NOT NULL DEFAULT 0,
 	building INT NOT NULL DEFAULT 0,
 	bushes INT NOT NULL DEFAULT 0,
@@ -111,7 +112,8 @@ CREATE TABLE IF NOT EXISTS episode_dates (
 	title VARCHAR(255) NOT NULL,
 	month VARCHAR(20) NOT NULL,
 	day INT NOT NULL,
-	year INT NOT NULL
+	year INT NOT NULL,
+	date VARCHAR(20) NOT NULL
 );
 
 
@@ -131,3 +133,5 @@ IGNORE 1 ROWS;
 
 UPDATE subject_matter SET title = SUBSTRING(title,2) WHERE title LIKE '"%';
 UPDATE subject_matter SET title = SUBSTRING(title, 1, LENGTH(title)-1) WHERE title LIKE '%"';
+
+UPDATE colors_used SET colors = REPLACE(REPLACE(colors, '\r', ''), '\n', '');
