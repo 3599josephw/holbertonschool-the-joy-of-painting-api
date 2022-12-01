@@ -15,7 +15,7 @@ Once the repo is cloned:
 
 ## Queries
 
-In the browser, go to 0.0.0.0/3000/filters
+In a browser, go to `0.0.0.0/3000/filters`
 
 Filter options:
    * match (can be 1 or 0)
@@ -26,6 +26,6 @@ Filter options:
 If match is 1, the query will return only episodes that match all of the filters
 If match is 0, the query will return any episodes that match any of the filters
 
-Example query: http://0.0.0.0:3000/filter?match=1&months=January&months=March&colors=Bright_Red&colors=Prussian_Blue&subject=cabin
+Example query: `http://0.0.0.0:3000/filter?match=1&months=January&months=March&colors=Bright_Red&colors=Prussian_Blue&subject=cabin`
 
 The query will return a JSON result with the episodes' title, episode/season number, date aired, image link to the painting, link to the video on YouTube, all colors included in the painting, and subjects matching those requested
