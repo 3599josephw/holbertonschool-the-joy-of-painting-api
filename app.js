@@ -42,7 +42,7 @@ function filter(req, res) {
     andOr = "OR";
   }
 
-  let sql = "SELECT e.title, e.date, c.img_src, c.youtube_src, c.colors, c.color_hex";
+  let sql = "SELECT e.title, s.episode, e.date, c.img_src, c.youtube_src, c.colors, c.color_hex";
   let subjectQuery = ""
   if (subject) {
     if (Array.isArray(subject)) {
